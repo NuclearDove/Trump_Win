@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>助力大统领大胜</title>
+    <style>
+        body {
+            background-color: #FFF200; 
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+            font-family: 'Helvetica Neue', Helvetica, 'PingFang SC', 'Microsoft YaHei', sans-serif;
+            user-select: none;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 420px;
+            text-align: center;
+            padding: 30px 20px;
+            box-sizing: border-box;
+        }
+
+        .title-line1 {
+            color: #D8000F;
+            font-size: 28px;
+            font-weight: 900;
+            letter-spacing: 1px;
+            margin-bottom: -5px;
+        }
+
+        .title-line2 {
+            color: #D8000F;
+            font-size: 50px;
+            font-weight: 900;
+            margin-bottom: 25px;
+            text-shadow: 2px 2px 0px rgba(0,0,0,0.1);
+        }
+
+        /* 模拟原图中间的标志盒子 */
+        .icon-box {
+            width: 110px;
+            height: 110px;
+            background: #E30013;
+            border-radius: 20px;
+            margin: 0 auto 30px;
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.2), 0 4px 8px rgba(0,0,0,0.1);
+            background-image: 
+                radial-gradient(white 15%, transparent 16%),
+                radial-gradient(white 15%, transparent 16%);
+            background-size: 20px 20px;
+            background-position: 0 0, 10px 10px;
+        }
+
+        .icon-inner {
+            background: #E30013;
+            color: white;
+            font-size: 30px;
+            font-weight: bold;
+            padding: 5px 15px;
+            border: 2px solid white;
+            border-radius: 10px;
+            z-index: 2;
+        }
+
+        /* 3D立体红色按钮 */
+        .slash-btn {
+            background: linear-gradient(180deg, #FF4B4B 0%, #D8000F 100%);
+            color: white;
+            font-size: 26px;
+            font-weight: bold;
+            padding: 15px 0;
+            width: 95%;
+            border-radius: 50px;
+            box-shadow: inset 0px 3px 5px rgba(255,255,255,0.4), 
+                        0px 6px 0px #9A000A, 
+                        0px 8px 15px rgba(0,0,0,0.3);
+            border: none;
+            cursor: pointer;
+            margin-bottom: 25px;
+            letter-spacing: 2px;
+            transition: all 0.1s;
+            outline: none;
+            animation: pulse 1.5s infinite;
+        }
+
+        .slash-btn:active {
+            transform: translateY(6px);
+            box-shadow: inset 0px 3px 5px rgba(255,255,255,0.4), 
+                        0px 0px 0px #9A000A;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+            100% { transform: scale(1); }
+        }
+
+        .progress-text {
+            font-size: 20px;
+            font-weight: bold;
+            color: #111;
+            margin-bottom: 10px;
+        }
+
+        /* 进度条外框 */
+        .progress-wrapper {
+            background: linear-gradient(180deg, #FAD961 0%, #F76B1C 100%);
+            height: 20px;
+            border-radius: 20px;
+            padding: 3px;
+            margin: 0 auto 15px;
+            width: 95%;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.3);
+        }
+
+        /* 进度条内芯 */
+        .progress-fill {
+            background: linear-gradient(180deg, #74E865 0%, #30A820 100%);
+            height: 100%;
+            width: 99.9%;
+            border-radius: 15px;
+            box-shadow: inset 0 2px 3px rgba(255,255,255,0.5);
+            transition: width 0.5s ease-out;
+        }
+
+        /* 动态计数器容器 */
+        .counters-container {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-bottom: 20px;
+            width: 95%;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .counter-item {
+            background: #FFF;
+            border: 2px dashed #D8000F;
+            color: #D8000F;
+            padding: 8px 15px;
+            border-radius: 10px;
+            font-size: 15px;
+            font-weight: bold;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            animation: popIn 0.3s ease-out;
+        }
+        
+        .counter-item span.count-val {
+            color: #30A820;
+            font-size: 18px;
+        }
+
+        @keyframes popIn {
+            0% { transform: scale(0.8); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        .footer-text {
+            font-size: 18px;
+            font-weight: 800;
+            color: #111;
+            line-height: 1.6;
+        }
+        
+        .highlight {
+            color: #D8000F;
+            font-size: 24px;
+            margin: 0 5px;
+        }
+
+        /* 拟真拼多多弹窗 */
+        .modal-overlay {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.6);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 100;
+        }
+
+        .modal-box {
+            background: #FFF;
+            width: 80%;
+            max-width: 320px;
+            border-radius: 20px;
+            padding: 25px 20px;
+            text-align: center;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            position: relative;
+            animation: modalShow 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        @keyframes modalShow {
+            0% { transform: scale(0.7); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        .modal-title {
+            color: #D8000F;
+            font-size: 24px;
+            font-weight: 900;
+            margin-bottom: 15px;
+        }
+
+        .modal-content {
+            font-size: 16px;
+            color: #333;
+            line-height: 1.6;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+
+        .modal-btn {
+            background: linear-gradient(180deg, #FF4B4B 0%, #D8000F 100%);
+            color: white;
+            font-size: 18px;
+            font-weight: bold;
+            padding: 10px 0;
+            width: 100%;
+            border-radius: 25px;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(216,0,15,0.3);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <!-- 顶部文案 -->
+        <div class="title-line1">已消灭伊朗抵抗力量</div>
+        <div class="title-line2">99.9%</div>
+
+        <!-- 中间图标 -->
+        <div class="icon-box">
+            <div class="icon-inner">胜</div>
+        </div>
+
+        <!-- 助力按钮 -->
+        <button class="slash-btn" id="main-btn" onclick="slashAction()">点击助力</button>
+
+        <!-- 进度条区域 -->
+        <div class="progress-text" id="p-text">已完成 99.9%</div>
+        <div class="progress-wrapper">
+            <div class="progress-fill" id="p-bar"></div>
+        </div>
+
+        <!-- 动态物品计数器容器 -->
+        <div class="counters-container" id="counters-box">
+            <!-- 计数器会动态插入到这里 -->
+        </div>
+
+        <!-- 底部说明文案 -->
+        <div class="footer-text">
+            还剩<span class="highlight" id="remain-num">0.1%</span>即可大胜<br>
+            点击助力唐纳德·特朗普大统领取得胜利
+        </div>
+    </div>
+
+    <!-- 自定义套娃弹窗 -->
+    <div class="modal-overlay" id="modal">
+        <div class="modal-box">
+            <div class="modal-title" id="modal-title">助力成功！</div>
+            <div class="modal-content" id="modal-desc"></div>
+            <button class="modal-btn" onclick="closeModal()">开心收下</button>
+        </div>
+    </div>
+
+    <script>
+        let clicks = 0;
+        let lastFraction = 0; // 用于最后的终极折磨小数
+
+        function showModal(title, desc) {
+            document.getElementById('modal-title').innerText = title;
+            document.getElementById('modal-desc').innerHTML = desc;
+            document.getElementById('modal').style.display = 'flex';
+        }
+
+        function closeModal() {
+            document.getElementById('modal').style.display = 'none';
+            updateUI(); // 关掉弹窗后再更新界面，更有仪式感
+        }
+
+        function slashAction() {
+            clicks++;
+            
+            // 核心套娃逻辑
+            if (clicks === 1) {
+                showModal("手气极佳！", "您一刀斩下，成功助力获得 <span style='color:#D8000F;font-size:20px;'>0.09%</span> 进度！<br><br>当前还剩最后 0.01% 即可大胜！");
+            } else if (clicks === 2) {
+                showModal("触发隐藏军备！", "成功获得 <span style='color:#D8000F;font-size:20px;'>9枚【战斧巡航导弹】</span>！<br><br>集齐 10 枚战斧导弹即可直接抵扣 0.01% 进度！");
+            } else if (clicks === 3) {
+                showModal("获得核心组件！", "成功获得 <span style='color:#D8000F;font-size:20px;'>9个【导弹制导芯片】</span>！<br><br>集齐 10 个芯片即可兑换 1 枚战斧巡航导弹！");
+            } else if (clicks === 4) {
+                showModal("获得后勤物资！", "成功获得 <span style='color:#D8000F;font-size:20px;'>9吨【军用航空燃油】</span>！<br><br>集齐 10 吨燃油即可兑换 1 个制导芯片！");
+            } else if (clicks === 5) {
+                showModal("获得通关文牒！", "成功获得 <span style='color:#D8000F;font-size:20px;'>9份【国会军费拨款单】</span>！<br><br>集齐 10 份拨款单即可兑换 1 吨航空燃油！");
+            } else {
+                lastFraction++;
+                // 无限黑洞，永远差0.01
+                let gain = (0.1 / Math.pow(10, lastFraction)).toFixed(lastFraction + 1);
+                showModal("就差一点点了！", `成功获得 <span style='color:#D8000F;font-size:20px;'>${gain}份【国会军费拨款单】</span>！<br><br>胜利近在咫尺，请继续用力点击！`);
+            }
+        }
+
+        function updateUI() {
+            const pText = document.getElementById('p-text');
+            const remainElem = document.getElementById('remain-num');
+            const btn = document.getElementById('main-btn');
+
+            if (clicks === 1) {
+                pText.innerText = "已完成 99.99%";
+                remainElem.innerText = "0.01%";
+                document.getElementById('p-bar').style.width = "99.99%";
+                btn.innerText = "继续助力";
+            } else if (clicks === 2) {
+                addCounter('missile', '战斧巡航导弹', '9/10枚');
+            } else if (clicks === 3) {
+                addCounter('chip', '导弹制导芯片', '9/10个');
+            } else if (clicks === 4) {
+                addCounter('fuel', '军用航空燃油', '9/10吨');
+            } else if (clicks === 5) {
+                addCounter('bill', '国会军费拨款单', '9/10份');
+            } else {
+                // 更新最后一种物品的无限小数
+                let currentTotal = 9;
+                for(let i=1; i<=lastFraction; i++) {
+                    currentTotal += (0.1 / Math.pow(10, i-1));
+                }
+                updateCounter('bill', currentTotal.toFixed(lastFraction + 1) + '/10份');
+            }
+        }
+
+        // 添加新的计数器条目
+        function addCounter(id, name, initialCount) {
+            const box = document.getElementById('counters-box');
+            const div = document.createElement('div');
+            div.className = 'counter-item';
+            div.id = 'counter-' + id;
+            div.innerHTML = `<span>已收集 ${name}：</span> <span class="count-val">${initialCount}</span>`;
+            // 将新项目插在最前面（套娃最新的一层）
+            box.insertBefore(div, box.firstChild);
+        }
+
+        // 更新计数器数值
+        function updateCounter(id, newCount) {
+            const el = document.getElementById('counter-' + id);
+            if (el) {
+                el.querySelector('.count-val').innerText = newCount;
+                // 添加一个轻微的闪烁动画强调更新
+                el.style.transform = 'scale(1.05)';
+                el.style.borderColor = '#30A820';
+                setTimeout(() => {
+                    el.style.transform = 'scale(1)';
+                    el.style.borderColor = '#D8000F';
+                }, 200);
+            }
+        }
+    </script>
+</body>
+</html>
